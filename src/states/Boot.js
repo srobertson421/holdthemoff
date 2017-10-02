@@ -1,5 +1,7 @@
 import Phaser from 'phaser'
 
+import loadingBar from '../assets/loadingBar.png';
+
 class BootState extends Phaser.State {
   constructor(game) {
     super(game);
@@ -12,7 +14,7 @@ class BootState extends Phaser.State {
     this.scale.pageAlignHorizontally = true;
     this.scale.pageAlignVertically = true;
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
-    this.game.load.image('loader', './assets/loadingBar.png');
+    this.game.load.image('loader', loadingBar);
   }
 
   create() {

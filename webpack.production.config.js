@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // Phaser webpack config
 var phaserModule = path.join(__dirname, '/node_modules/phaser-ce/')
@@ -22,7 +23,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: './dist/',
+    // publicPath: './dist/',
     filename: 'bundle.js'
   },
   plugins: [
@@ -35,14 +36,29 @@ module.exports = {
         comments: false
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */})
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */}),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'index.html'),
+      inject: true,
+      minify: {
+        collapseWhitespace: true,
+      },
+    }),
   ],
   module: {
     rules: [
       { test: /\.js$/, use: ['babel-loader'], include: path.join(__dirname, 'src') },
       { test: /pixi\.js/, use: ['expose-loader?PIXI'] },
       { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
-      { test: /p2\.js/, use: ['expose-loader?p2'] }
+      { test: /p2\.js/, use: ['expose-loader?p2'] },
+      {
+        test: /\.(png|jpg|gif|json|ogg|mp3)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+          outputPath: 'assets/'
+        }
+      },
     ]
   },
   node: {
